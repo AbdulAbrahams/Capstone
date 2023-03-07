@@ -9,7 +9,7 @@ let { createToken } = require("../middleware/AuthenticatedUser");
 //USER CLASS
 class User {
   login(req, res) {
-    const { emailAdd, userPass } = req.body;
+    const { userEmail, userPass } = req.body;
     const strQry = `SELECT userID, firstName, lastName, userEmail, userPass, userRole
     FROM users 
     WHERE userEmail = '${userEmail}';
@@ -24,7 +24,7 @@ class User {
           if (cErro) throw cErro;
           //create token
           const jwToken = createToken({
-            emailAdd,
+            userEmail,
             userPass,
           });
           // saving tken
@@ -74,7 +74,7 @@ class User {
     // Hashing user password
     detail.userPass = await hash(detail.userPass, 15);
     let user = {
-      emailAdd: detail.emailAdd,
+      userEmail: detail.userEmail,
       userPass: detail.userPass,
     };
     const strQry = `INSERT INTO users
