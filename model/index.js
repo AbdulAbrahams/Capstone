@@ -59,7 +59,7 @@ class User {
   }
   fetchUser(req, res) {
     const strQry = `
-            SELECT userID, firstName, lastName,userEmail, userRole FROM users
+            SELECT userID, firstName, lastName, userEmail, userRole FROM users
             WHERE userID = ?;
             `;
 
@@ -77,8 +77,7 @@ class User {
       userEmail: detail.userEmail,
       userPass: detail.userPass,
     };
-    const strQry = `INSERT INTO users
-            SET ?;`;
+    const strQry = `INSERT INTO users SET ?;`;
     database.query(strQry, [detail], (err) => {
       if (err) {
         res.status(401).json({ err });
@@ -105,7 +104,7 @@ class User {
     //db
     database.query(strQry, [data, req.params.id], (err) => {
       if (err) throw err;
-      res.status(200).json({ msg: "A row was affected successfuly" });
+      res.status(200).json({ msg: "A row was affected successfully" });
     });
   }
   forgotPassword(req, res) {
@@ -120,7 +119,7 @@ class User {
     //db
     database.query(strQry, [data, req.params.id], (err) => {
       if (err) throw err;
-      res.status(200).json({ msg: "Password successfuly updated" });
+      res.status(200).json({ msg: "Password successfully updated" });
     });
   }
   deleteUser(req, res) {
