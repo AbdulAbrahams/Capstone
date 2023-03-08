@@ -1,6 +1,6 @@
 const database = require("../config");
 let { hash, compare, hashSync } = require("bcrypt");
-let { createToken } = require("../middleware/AuthenticatedUser");
+let { createToken, verifyToken } = require("../middleware/AuthenticatedUser");
 const jwToken = require('jsonwebtoken');
 
 
