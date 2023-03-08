@@ -1,52 +1,49 @@
-//connect database
 const database = require("../config");
-//bcrypt
 let { hash, compare, hashSync } = require("bcrypt");
-//token
 let { createToken } = require("../middleware/AuthenticatedUser");
 
-//CLASSES
-//USER CLASS
 class User {
   login(req, res) {
     const { userEmail, userPass } = req.body;
-    const strQry = `SELECT userID, firstName, lastName, userEmail, userPass, userRole
-    FROM users 
-    WHERE userEmail = '${userEmail}';
-        `;
 
-    database.query(strQry, async (err, data) => {
+    database.query(`SELECT userID, firstName, lastName, userEmail, userPass, userRole
+    FROM users 
+    WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
-      if (!data || data == null) {
-        res.status(401).json({ err: "Incorrect email address" });
+      if (result.length === 0) {
+        res.send("Email not found please register");
       } else {
-        await compare(userPass, data[0].userPass, (cErro, cResult) => {
-          if (cErro) throw cErro;
-          //create token
-          const jwToken = createToken({
-            userEmail,
-            userPass,
-          });
-          // saving tken
-          res.cookie("Green_Light", jwToken, {
-            maxAge: 3600000, //time limit this one is 1hour
-            httpOnly: true, //makes it private
-          });
-          if (cResult) {
-            res.status(200).json({
-              msg: "Logged in",
-              jwToken,
-              result: data[0],
-            });
-          } else {
-            res.status(401).json({
-              err: "Incorrect Password or Email. Please try again.",
-            });
-          }
-        });
+        const isMatch = await bcrypt.compare(req.body.userPass, result[0].userPass);
+        if (!isMatch) {
+          res.send("Password is incorrect");
+        } else {
+          const data = {
+            user: {
+              id:result[0].id,
+              firstName: result[0].firstName,
+              lastName: result[0].lastName,
+              userEmail:result[0].userEmail,
+            },
+          };
+
+          jwToken.sign(
+            data, process.env.jwtSecret,
+            {
+              expiresIn: "365 days",
+            },
+            (err, token) => {
+              if (err) throw err;
+              res.json({ token });
+            }
+          );
+        }
       }
     });
+  } catch (error) {
+    console.log(error);
   }
+
+
   fetchUsers(req, res) {
     const strQry = `
             SELECT userID, firstName, lastName, userEmail, userRole FROM users;
