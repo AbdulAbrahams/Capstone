@@ -95,12 +95,9 @@ class User {
     let data = req.body;
     if (data.userPass != null || data.userPass != undefined)
       data.userPass = hashSync(data.userPass, 15);
-    const strQry = `
-            UPDATE users
-            SET ?
-            WHERE userID = ?;
-            `;
-    //db
+      
+    const strQry = `UPDATE users SET ? WHERE userID = ?;`;
+
     database.query(strQry, [data, req.params.id], (err) => {
       if (err) throw err;
       res.status(200).json({ msg: "A row was affected successfully" });
@@ -110,23 +107,16 @@ class User {
     let data = req.body;
     if (data.userPass != null || data.userPass != undefined)
       data.userPass = hashSync(data.userPass, 15);
-    const strQry = `
-      UPDATE users
-            SET ?
-            WHERE userID = ?;
-      `;
-    //db
+    const strQry = `UPDATE users SET ? WHERE userID = ?;`;
+
     database.query(strQry, [data, req.params.id], (err) => {
       if (err) throw err;
       res.status(200).json({ msg: "Password successfully updated" });
     });
   }
   deleteUser(req, res) {
-    const strQry = `
-            DELETE FROM users
-            WHERE userID = ?;
-            `;
-    //db
+    const strQry = `DELETE FROM users WHERE userID = ?;`;
+
     database.query(strQry, [req.params.id], (err) => {
       if (err) throw err;
       res.status(200).json({ msg: "A record was removed from a database" });
