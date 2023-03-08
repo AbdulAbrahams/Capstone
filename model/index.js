@@ -8,7 +8,7 @@ class User {
   login(req, res) {
     const { userEmail, userPass } = req.body;
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userPass, userRole
+    database.query(`SELECT userID, firstName, lastName, userEmail, userPass, userRole, userProfile
     FROM users 
     WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
@@ -25,6 +25,7 @@ class User {
               firstName: result[0].firstName,
               lastName: result[0].lastName,
               userEmail:result[0].userEmail,
+              userProfile:result[0].userProfile,
               userPass:result[0].userPass,
             },
           };
@@ -49,14 +50,14 @@ class User {
 
   fetchUsers(req, res) {
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userRole FROM users;`, (err, data) => {
+    database.query(`SELECT userID, firstName, lastName, userEmail, userRole, userProfile FROM users;`, (err, data) => {
       if (err) throw err;
       else res.status(200).json({ results: data });
     });
   }
   fetchUser(req, res) {
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userRole FROM users WHERE userID = ?;`, [req.params.id], (err, data) => {
+    database.query(`SELECT userID, firstName, lastName, userEmail, userRole, userProfile FROM users WHERE userID = ?;`, [req.params.id], (err, data) => {
       if (err) throw err;
       else res.status(200).json({ result: data });
     });
