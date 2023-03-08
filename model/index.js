@@ -1,6 +1,8 @@
 const database = require("../config");
 let { hash, compare, hashSync } = require("bcrypt");
 let { createToken } = require("../middleware/AuthenticatedUser");
+const jwToken = require('jsonwebtoken');
+
 
 class User {
   login(req, res) {
@@ -13,7 +15,7 @@ class User {
       if (result.length === 0) {
         res.send("Email not found please register");
       } else {
-        const isMatch = await bcrypt.compare(req.body.userPass, result[0].userPass);
+        const isMatch = await compare(req.body.userPass, result[0].userPass);
         if (!isMatch) {
           res.send("Password is incorrect");
         } else {
@@ -27,7 +29,7 @@ class User {
           };
 
           jwToken.sign(
-            data, process.env.jwtSecret,
+            data, process.env.SECRET_KEY,
             {
               expiresIn: "365 days",
             },
