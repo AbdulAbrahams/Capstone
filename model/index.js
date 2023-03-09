@@ -84,11 +84,12 @@ class User {
     });
   }
   updateUser(req, res) {
-    let data = req.body;
+    let userID = req.params.id;
+        let data = req.body;
     if (data.userPass != null || data.userPass != undefined)
       data.userPass = hashSync(data.userPass, 15);
 
-    database.query(`UPDATE users SET ? WHERE userID = ?;`, [data, req.params.id], (err) => {
+    database.query(`UPDATE users SET ? WHERE userID = '${userID}';`, [data, userID], (err) => {
       if (err) throw err;
       res.status(200).json({ msg: "A row was affected successfully" });
     });
@@ -131,9 +132,7 @@ class Product {
 
     database.query(`INSERT INTO products SET ?;`, [req.body], (err) => {
       if (err) {
-        res
-          .status(400)
-          .json({ err: "Adding new product was unsuccessful" });
+        res.status(400).json({ err: "Adding new product was unsuccessful" });
       } else {
         res.status(200).json({ msg: "Product successfully added" });
       }
