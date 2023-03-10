@@ -21,7 +21,7 @@ class User {
         } else {
           const data = {
             user: {
-              id:result[0].id,
+              userID:result[0].userID,
               firstName: result[0].firstName,
               lastName: result[0].lastName,
               userEmail:result[0].userEmail,
@@ -124,7 +124,7 @@ class Product {
   fetchProduct(req, res) {
 
     database.query(`SELECT id, prodName, prodDescription, brand, price, prodQuantity, imgURL FROM products WHERE id = ?;`, [req.params.id], (err, results) => {
-      if (err) throw err;
+      if (err) throw err, console.log(err);;
       res.status(200).json({ results: results });
     });
   }
