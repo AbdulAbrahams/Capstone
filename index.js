@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 
 app.use(route);
 app.use(
-  cors(),
+  cors({ origin: "http://localhost:8080/"}),
   cookieParser(),
   express.json,
   express.urlencoded({ extended: false })
