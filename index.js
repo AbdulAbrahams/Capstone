@@ -9,13 +9,13 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");
-  res.header("Access-Control-Allow-Origin", "http://localhost:8080/");
+  res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 
 app.use(route);
 app.use(
-  cors({ origin: "http://localhost:8080/"}),
+  cors(),
   cookieParser(),
   express.json,
   express.urlencoded({ extended: false })
