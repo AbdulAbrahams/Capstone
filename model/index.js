@@ -11,7 +11,7 @@ class User {
     database.query(`SELECT userID, firstName, lastName, userEmail, userPass, userRole, userProfile
     FROM users 
     WHERE userEmail = '${userEmail}';`, async (err, result) => {
-      if (err) throw err;
+      if (err) throw err, console.log(err);
       if (result.length === 0) {
         res.send("Email not found please register");
       } else {
@@ -69,7 +69,7 @@ class User {
 
     database.query(`INSERT INTO users SET ?;`, [detail], (err) => {
       if (err) {
-        res.status(401).json({ err });
+        res.status(401).json({ err }), console.log(err);
       } else {
         const jwToken = createToken(user);
         res.cookie("LegitUser", jwToken, {
