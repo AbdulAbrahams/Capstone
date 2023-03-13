@@ -21,6 +21,6 @@ app.use(
   express.urlencoded({ extended: false })
 );
 
-https.createServer(app).listen(port, () => {
+app.listen(port, () => {
   console.log(`Server is running at port ${port}`);
 });
