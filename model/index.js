@@ -29,12 +29,9 @@ class User {
               userPass:result[0].userPass,
             },
           };
-
           jwToken.sign(
             data, process.env.SECRET_KEY,
-            {
-              expiresIn: "1 year",
-            },
+            {expiresIn: "1 year"},
             (err, token) => {
               if (err) throw err;
               res.json({ token, data });
