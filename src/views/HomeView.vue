@@ -2,9 +2,9 @@
   <div class="everything">
     <Navbar/>
   <div class="intro">
-    <video autoplay loop muted playsinline class="vid">
+    <!-- <video autoplay loop muted playsinline class="vid">
       <source src="../assets/videoplayback.webm" type="video/mp4">
-    </video>
+    </video> -->
   </div>
   <div class="container">
     <h1>Our Sneakers</h1>
