@@ -2,9 +2,9 @@
   <div class="everything">
     <Navbar/>
   <div class="intro">
-    <!-- <video autoplay loop muted playsinline class="vid">
+    <video autoplay loop muted playsinline class="vid">
       <source src="../assets/videoplayback.webm" type="video/mp4">
-    </video> -->
+    </video>
   </div>
   <div class="container">
     <h1>Our Sneakers</h1>
@@ -25,6 +25,7 @@
             </div>
     </div>
   </div>
+  <Footer/>
   </div>
   
   
@@ -33,51 +34,27 @@
 <script>
 import axios from "axios";
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
   export default {
       name: 'HomeView',
-      components: {Navbar},
+      components: {Navbar, Footer},
       data() {
      return {
          items: this.$store.state.products,
      };
  },
- created() {
-     this.getProducts();
- },
- methods: {
-     async getProducts() {
-         try{
-             const response = await axios.get("https://supremium2.onrender.com/products");
-             this.items = response.data.results;
-             console.log(response);
-         } catch (err) {
-      
-          console.log(err);
-         }
-     },
-     async deleteProduct(id) {
-         try {
-             await axios.delete(`https://supremium2.onrender.com/products/${id}`);
-             this.getProducts();
-         } catch(err) {
-             console.log(err);
-         }
-     },
- },
-
+ 
  computed: {
         products() {
             return this.$store.state.products?.filter(products => { let isMatch = true; if (!products.title.toLowerCase().includes(this.search.toLowerCase())) { isMatch = false; } return isMatch });
         },
-        // category() {
-        //     return this.$store.state.products?.filter(products => { let isMatch = true; if (!products.category.toLowerCase().includes(this.search.toLowerCase())) { isMatch = false; } return isMatch })
-        // },
     },
     mounted() {
         this.$store.dispatch("getProducts");
         this.$store.commit("setSingleProduct", null);
     },
 };
+
 </script>
 
 <style>
@@ -126,9 +103,9 @@ import Navbar from '../components/Navbar.vue'
   font-size: 19px;
 }
 
-@media screen and (width <= 700px) {
+@media screen and (width <= 768px) {
   .intro video{
-    margin-top: 22vh;
+    margin-top: 20vh;
   }
 }
 

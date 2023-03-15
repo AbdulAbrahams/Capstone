@@ -37,19 +37,22 @@
          <div class="table crud-table">
               <table class="table align-middle container-sm">
               <thead class="">
+                <tr>
                   <th>First Name</th>
                   <th>Last Name</th>
                   <th>Role</th>
-                  <th>Profile Image</th>
+                  <th>Image</th>
                   <th>Edit</th>
+                </tr>
+                  
               </thead>
               <tbody id="shoe-list" class="">
                 <tr v-for="user in users" :key="user.id" style="font-size: 14px;">
-                    <td>{{ user.firstName }}</td>
-                    <td>{{ user.lastName }}</td>
-                    <td>{{ user.userRole }}</td>
-                    <td><img :src="user.userProfile" style="width: 60px; height: 50px;"></td>
-                    <td>
+                    <td data-label="First Name">{{ user.firstName }}</td>
+                    <td data-label="Last Name">{{ user.lastName }}</td>
+                    <td data-label="Role">{{ user.userRole }}</td>
+                    <td data-label="Image"><img :src="user.userProfile" style="width: 60px; height: 50px;"></td>
+                    <td data-label="Edit">
                       <a  class="btn btn-dark btn-md edit" data-bs-toggle="modal" :data-bs-target="`#editModal${user.userID}`" id="addCart" style="font-size: 12px;">Edit</a>
       <div class="modal fade" :id="`editModal${user.userID}`" :key="user.userID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -128,11 +131,11 @@
               </thead>
               <tbody id="shoe-list" class="">
                 <tr v-for="item in products" :key="item.id" style="font-size: 14px;">
-                    <td>{{ item.prodName }}</td>
-                    <td>{{ item.brand }}</td>
-                    <td>${{ item.price }}</td>
-                    <td><img :src="item.imgURL" style="width: 60px; height: 50px;"></td>
-                    <td>
+                    <td data-label="Name">{{ item.prodName }}</td>
+                    <td data-label="Brand">{{ item.brand }}</td>
+                    <td data-label="Price">${{ item.price }}</td>
+                    <td data-label="Image"><img :src="item.imgURL" style="width: 60px; height: 50px;"></td>
+                    <td data-label="Edit">
                       <a  class="btn btn-dark btn-md edit" data-bs-toggle="modal" :data-bs-target="`#productModal${item.id}`" id="addCart" style="font-size: 12px;">Edit</a>
       <div class="modal fade" :id="`productModal${item.id}`" :key="item.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -231,6 +234,10 @@
   </script>
   
   <style scoped>
+
+  .btn{
+    border-radius: 0px !important;
+  }
   
   .cont{
     overflow-x: hidden;
@@ -303,6 +310,45 @@
   
   .btn-close{
     background-color: white;
+  }
+
+  @media  (max-width: 600px ) {
+
+    .table thead{
+      display: none !important;
+
+    }
+
+    .table, .table tbody, .table tr, .table td{
+      display: block !important;
+      width: 100% !important;
+    }
+
+    .table tr{
+      background: black;
+      margin-bottom: 20px !important;
+    }
+
+    .table tbody{
+      background: white;
+    }
+
+    .table tbody tr td{
+      text-align: right;
+      position: relative;
+      width: 100%;
+    }
+
+    .table td:before{
+      display: block;
+      color: white;
+      content: attr(data-label) !important;
+      text-align: left;
+    }
+
+    .modal-body p{
+      text-align: left;
+    }
   }
   
   </style>

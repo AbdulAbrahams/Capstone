@@ -17,18 +17,18 @@
                 </div>
                 </div>
             </div>
-            
         </div>
-        
     </div>
+    <Footer/>
         
 </template>
 <script>
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 export default {
     props: ['id'],
     name: 'SingleProduct',
-    components: {Navbar},
+    components: {Navbar, Footer},
     computed: {
         product() {
             return this.$store.state.product;
@@ -68,7 +68,7 @@ export default {
 }
 
 .single{
-    margin-top: 100px;
+    margin-top: 120px;
 }
 
 

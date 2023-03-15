@@ -6,29 +6,32 @@
           </button>
           <span class="name animate__animated animate__backInDown">Supremium</span>
           <button type="button" class="btn position-relative">
-            <router-link to="/checkout"><i class="fa fa-shopping-cart cart"></i></router-link>
+            <router-link to="/checkout" @click="scrollTop()" onClick="window.location.reload()"><i class="fa fa-shopping-cart cart"></i></router-link>
   <!-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill numbers">
     0
   </span> -->
 </button>
           <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header" v-for="user in users" :key="user.userID">
-      <a href="/profile" class="d-flex align-items-center link-dark text-decoration-none my-3 mx-2" :data-bs-target="`#NavUser${user.userID}`">
-        <img :src="user.userProfile" alt="" width="32" height="32" class="rounded-circle me-2">
-        <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-      </a>
+            <div class="offcanvas-header" v-if="user">
+              <router-link :to="{ name: 'profile', params: { id: user.userID }}" @click="scrollTop()">
+                    <a href="" class="d-flex align-items-center link-dark text-decoration-none my-3 mx-2" :data-bs-target="`#NavUser${user.userID}`">
+                        <img :src="user.userProfile" alt="" width="32" height="32" class="rounded-circle me-2">
+                       <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                    </a>
+                </router-link>
+      
             <button type="button" class="btn-close btn-light text-reset mx-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" data-bs-dismiss="offcanvas">
                 <li class="nav-item my-4 mx-2">
-                    <router-link to="/">Home</router-link>
+                    <router-link to="/" @click="scrollTop()" onClick="window.location.reload()">Home</router-link>
                 </li>
                 <li class="nav-item my-4 mx-2">
-                    <router-link to="/admin">Admin</router-link>
+                    <router-link to="/admin" @click="scrollTop()">Admin</router-link>
                 </li>
                 <li class="nav-item my-4 mx-2">
-                    <router-link to="/contact">Contact</router-link>
+                    <router-link to="/contact" @click="scrollTop()">Contact</router-link>
                 </li>
               </ul>
             </div>
@@ -44,25 +47,22 @@ import 'animate.css';
 import axios from "axios";
     export default {
         name: 'Navbar',
-        data() {
-       return {
-           users: []
-       };
-   },
-   created() {
-       this.fetchUsers();
-   },
-   methods: {
-    async fetchUsers() {
-           try{
-               const response = await axios.get(`https://supremium2.onrender.com/users`);
-               this.users = response.data.results;
-               console.log(response);
-           } catch (err) {
-               console.log(err);
-           }
-       },
-   },
+        computed: {
+        user() {
+            return this.$store.state.user;
+        },
+    },
+    created() {
+        // this.$store.dispatch("getUser", this.$route.params.id);
+        console.log();
+    },
+    methods: {
+      scrollTop() {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        Transition = 0.5;
+      },
+    },
+   
 };
 
 </script>

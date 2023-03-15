@@ -36,10 +36,16 @@ const routes = [
     path: '/admin',
     name: 'admin',
     component: () => import( '../views/Admin.vue')
-  },{
+  },
+  {
     path: '/singleProduct/:id',
     name: 'singleProduct',
     component: () => import( '../views/SingleProduct.vue')
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import( '../views/Profile.vue')
   }
 ]
 

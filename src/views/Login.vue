@@ -16,7 +16,6 @@
       <button class="btn btn-light log" v-on:click="submit">Login</button>
     </div>
     
-    <a href="">Forgot Password?</a><br>
     <router-link to="/register"><a href="">Don't have an account?</a></router-link>
      </form>
 
