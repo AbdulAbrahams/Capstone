@@ -214,7 +214,7 @@ class Cart{
     deleteCart(req, res) {
 
       // const delCart = `SELECT cart FROM users WHERE id = ${req.params.id}`;
-    db.query(`SELECT cart FROM users WHERE id = ${req.params.id}`, (err, results) => {
+    db.query(`SELECT cart FROM users WHERE cartID = ${req.params.id}`, (err, results) => {
         if (err) {
             res.json({
                 status: 400,
@@ -231,7 +231,7 @@ class Cart{
                 });
 
                 // const query = ` UPDATE users SET cart = ? WHERE id = ${req.params.id}`;
-                db.query(`UPDATE users SET cart = ? WHERE id = ${req.params.id}`, [JSON.stringify(result)], (err, results) => {
+                db.query(`UPDATE users SET cart = ? WHERE cartID = ${req.params.id}`, [JSON.stringify(result)], (err, results) => {
                     if (err) {
                         res.json({
                             status: 400,
