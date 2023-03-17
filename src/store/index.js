@@ -12,6 +12,8 @@ export default createStore({
     product: null,
     token: null,
     cart: null,
+    admin: null,
+
   },
   getters: {
     getUsers: (state) => state.users,
@@ -41,15 +43,11 @@ export default createStore({
     setCart(state, cart) {
       state.cart = cart;
     },
-    LogOut(state){ 
-      (state.user = ""), 
-      (state.token = "") 
-     },
   },
   actions: {
     registerUser: async (context, payload) => {
       const { firstName, lastName, userEmail, userPass } = payload;
-      await fetch("http://localhost:6060/register", {
+      await fetch("https://supremium2.onrender.com/register", {
         method: "POST",
         headers: { "Content-type": "application/json; charset=UTF-8" },
         body: JSON.stringify({
@@ -72,7 +70,7 @@ export default createStore({
     },
 
     async loginUser(context, payload) {
-      fetch("http://localhost:6060/login", {
+      fetch("https://supremium2.onrender.com/login", {
         method: "POST",
         headers: { "Content-type": "application/json; charset=UTF-8" },
         body: JSON.stringify(payload),
@@ -86,7 +84,8 @@ export default createStore({
           } else {
             console.log("Logged in");
             console.log(data.data.user);
-            context.commit("setUser", data.data.user);
+            context.commit("setUser", data.data.user);        
+            sessionStorage.getItem("token")
             router.push({ name: "home" });
           }
         });
@@ -119,31 +118,25 @@ export default createStore({
         .then(() => context.dispatch("getUsers"));
     },
 
-    createUser: async (context, payload) => {
+    addUser: async (context, payload) => {
       const { firstName, lastName, userEmail, userPass } = payload;
-
-      await fetch(
-        "https://supremium2.onrender.com/users/" + context.state.user.userID,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-          body: JSON.stringify({
-            firstName: firstName,
-            lastName: lastName,
-            userEmail: userEmail,
-            userPass: userPass,
-          }),
-        }
-      )
+      await fetch("https://supremium2.onrender.com/register", {
+        method: "POST",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          userEmail: userEmail,
+          userPass: userPass,
+        }),
+      })
         .then((response) => response.json())
         .then((json) =>
           context.commit(
-            "setUser",
+            "setUsers",
             json,
             router.push({
-              name: "Admin",
+              name: "login",
             })
           )
         );
@@ -165,6 +158,17 @@ export default createStore({
         });
     },
 
+    checkAdmin(context) {
+      // fetch("https://supremium2.onrender.com/user/" + user.userID);
+      if (context.state.user != null) {
+        if (context.state.user.userRole = "Admin") {
+          context.state.admin = true;
+        } else {
+          context.state.admin = false;
+        }
+      }
+    },
+
     getProducts: async (context) => {
       let res = await fetch("https://supremium2.onrender.com/products");
       let data = await res.json();
@@ -183,7 +187,7 @@ export default createStore({
       context.commit("setSingleProduct", product.results[0]);
     },
 
-    addProducts: async (context, payload) => {
+    addProduct: async (context, payload) => {
       const { prodName, price, brand, prodDescription, imgURL } = payload;
 
       try {
@@ -192,13 +196,7 @@ export default createStore({
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
-          body: JSON.stringify({
-            prodName: prodName,
-            price: price,
-            brand: brand,
-            prodDescription: prodDescription,
-            imgURL: imgURL,
-          }),
+          body: JSON.stringify({ payload }),
         })
           .then((response) => response.json)
           .then((json) => context.commit("setProducts", json.data));

@@ -27,7 +27,7 @@
       </div>
 
 <div>
-<button type="submit" class="btn btn-light reg" value="register">Register</button>
+<button type="submit" class="btn btn-light reg" value="register" v-on:click="toggle"><span id="logs">Register</span><i class="fa fa-spinner fa-spin" id="icon"></i></button>
 </div>
 
 <router-link to="/login"><a href="">Already have an account?</a></router-link>
@@ -61,13 +61,22 @@ import 'animate.css';
             this.register.lastName = "";
             this.register.userEmail = "";
             this.register.userPass = "";
-            }
+            },
+
+            toggle: function(){
+        document.querySelector("#icon").style.display = "inline-block";
+        document.querySelector("#logs").style.display = "none";
+       }
         }
     }
     
 </script>
 
 <style scoped>
+
+i{
+    display: none;
+}
 .my-element {
   animation: fadeIn;
   animation-duration: 5s;

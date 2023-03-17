@@ -5,14 +5,11 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <span class="name animate__animated animate__backInDown">Supremium</span>
-          <button type="button" class="btn position-relative">
+          <button type="button" class="btn position-relative cart">
             <router-link to="/checkout" @click="scrollTop()" onClick="window.location.reload()"><i class="fa fa-shopping-cart cart"></i></router-link>
-  <!-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill numbers">
-    0
-  </span> -->
 </button>
           <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header" v-if="user">
+            <div class="offcanvas-header" v-if="user" data-bs-dismiss="offcanvas">
               <router-link :to="{ name: 'profile', params: { id: user.userID }}" @click="scrollTop()">
                     <a href="" class="d-flex align-items-center link-dark text-decoration-none my-3 mx-2" :data-bs-target="`#NavUser${user.userID}`">
                         <img :src="user.userProfile" alt="" width="32" height="32" class="rounded-circle me-2">
@@ -20,7 +17,7 @@
                     </a>
                 </router-link>
       
-            <button type="button" class="btn-close btn-light text-reset mx-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-light text-reset mx-2" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
               <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" data-bs-dismiss="offcanvas">
@@ -35,7 +32,10 @@
                 </li>
               </ul>
             </div>
-            <router-link to="/login" class="logBut mx-5 my-3 p-2"><a href="/login" class="butLog">Login</a></router-link>
+            <div class="btn-group my-4 mx-5" data-bs-dismiss="offcanvas">
+                  <router-link to="/login" class="logBut my-3 p-1 py-2 btn btn1"><a href="/login" class="butLog">Login</a></router-link>
+                  <a href="" class="logBut my-3 p-1 py-2 btn" @click="LogOut()">LogOut</a>
+            </div>
           </div>
         </div>
       </nav>
@@ -59,15 +59,28 @@ import axios from "axios";
     methods: {
       scrollTop() {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
-        Transition = 0.5;
       },
+      LogOut() {
+      this.$store.state.user = null
+      localStorage.clear()
+      this.$router.push("/");
+      }  
     },
-   
 };
+
+
 
 </script>
 
 <style  scoped>
+
+.btn{
+  border-radius: 0px;
+}
+
+.btn1{
+  border-right: 0px !important;
+}
 .my-element {
   display: inline-block;
   margin: 0 0.5rem;
@@ -92,7 +105,7 @@ import axios from "axios";
 
 .offcanvas{
     background-color: rgb(242, 242, 242);
-    max-width: 70vw;
+    max-width: 80vw;
 }
 
 
@@ -150,4 +163,9 @@ nav a.router-link-exact-active {
            transition: 0.4s;
         }
 
+@media screen and (width <= 375px) {
+  .name{
+  font-size: 18px;
+}
+}
 </style>

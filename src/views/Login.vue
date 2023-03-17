@@ -13,7 +13,7 @@
         <input type="password" v-model="userPass" name="password" id="password" class="my-2" placeholder="Enter Password" required>
     </div>
     <div>
-      <button class="btn btn-light log" v-on:click="submit">Login</button>
+      <button class="btn btn-light log" id="log" v-on:click="toggle"><span id="logs">Login </span><i class="fa fa-spinner fa-spin" id="icon"></i></button>
     </div>
     
     <router-link to="/register"><a href="">Don't have an account?</a></router-link>
@@ -42,11 +42,21 @@ import 'animate.css';
         };
         await this.$store.dispatch("loginUser", payload)
        },
+
+       toggle: function(){
+        document.querySelector("#icon").style.display = "inline-block";
+        document.querySelector("#logs").style.display = "none";
+       }
+
     }
 }
 </script>
 
 <style scoped>
+
+i{
+    display: none;
+}
 .my-element {
   animation: fadeIn;
   animation-duration: 5s;
@@ -127,5 +137,4 @@ h1{
 .log{
     font-family: 'Syne', sans-serif !important;
 }
-
 </style>

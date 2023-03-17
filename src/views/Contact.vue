@@ -124,7 +124,7 @@ h1{
 }
 
 .but{
-    display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }

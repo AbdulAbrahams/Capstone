@@ -1,35 +1,54 @@
 <template>
-    <Navbar/>
+  <!-- <div v-if="admin"> -->
+     <div class="everythin" v-if="users">
+    <div v-if="products">
+      <Navbar/>
     <div class="cont">
       <div class="users container">
       <h1 >Users</h1>
-      <!-- <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add User
-  </button> -->
+  </button>
   
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="setTimeout()"></button>
         </div>
         <div class="modal-body">
-          <form @submit.prevent="registerUser" method="POST">
-            <p>First Name</p>
-            <input class="col-12 my-3" id="Name" type="text" v-model="register.firstName" name="firstName"  required>
-                  <p>Last Name</p>
-                  <input class="col-12 my-3" id="Brand" type="text" v-model="register.lastName" name="lastName" required>
-                  <p>Email Address</p>
-                  <input class="col-12 my-3" id="Price" type="text" v-model="register.userEmail" name="userEmail" required>
-                  <p>Password</p>
-                  <input class="col-12 my-3" id="img" type="password" v-model="register.userPass" name="userPass" required>
-          </form>
-          <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Create User</button>
+          <form @submit.prevent="addUser" method="POST" class="mx-4 my-5">
+                <div class="row">
+        <div class="col">
+            <p>FirstName</p>
+          <input type="text" class="form-control" v-model="register.firstName" name="firstName"  aria-label="First name" required="">
         </div>
+      </div>
+        <div class="row">
+          <div class="col">
+              <p>LastName</p>
+            <input type="text" class="form-control" v-model="register.lastName" name="lastName" aria-label="Last name" required="">
+          </div>
         </div>
-        
+      <div class="row">
+        <div class="col">
+            <p>Email</p>
+          <input type="text" class="form-control" v-model="register.userEmail" name="userEmail"  aria-label="First name" required="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <p>Password</p>
+          <input type="password" class="form-control"  v-model="register.userPass" name="userPass" aria-label="Last name" required="">
+        </div>
+      </div>
+      <div class="modal-footer">
+      <button type="submit" class="btn btn-light" v-on:click="toggle"><span id="logs">Create User</span><i class="fa fa-spinner fa-spin" id="icon"></i></button>
+    </div>
+
+</form>
+        </div> 
       </div>
     </div>
   </div>
@@ -92,30 +111,34 @@
   
           <div class="products container">
           <h1>Products</h1>
-                  <!-- <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                  <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#exampleModal2">
             Add Product
-          </button> -->
+          </button>
           </div>
   <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="setTimeout()"></button>
         </div>
         <div class="modal-body">
-             <p>Product Name</p>
-                  <input class="col-12 my-3" id="Name" type="text"  required>
-                  <p>Product Description</p>
-                  <input class="col-12 my-3" id="Brand" type="text"  required>
-                  <p>Product Price</p>
-                  <input class="col-12 my-3" id="Price" type="text" required>
-                  <p>Image URL</p>
-                  <input class="col-12 my-3" id="img" type="text"  required>
+                <p>Product Name</p>
+                  <input class="col-12 my-3" v-model="prodName" id="Name" type="text"  required>
+                <p>Product Description</p>
+                  <input class="col-12 my-3" v-model="prodDescription" id="Brand" type="text"  required>
+                <p>Brand</p>
+                  <input class="col-12 my-3" v-model="brand" id="Name" type="text"  required>
+                <p>Price</p>
+                  <input class="col-12 my-3" v-model="price" id="Price" type="text" required>
+                <p>Quantity</p>
+                  <input class="col-12 my-3" v-model="prodQuantity" id="Price" type="text" required>
+                <p>Image URL</p>
+                  <input class="col-12 my-3" v-model="imgURL" id="img" type="text"  required>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" @click="createProduct">Save changes</button>
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+          <button type="submit" class="btn btn-primary" @click="addProduct">Save changes</button>
         </div>
       </div>
     </div>
@@ -176,18 +199,38 @@
     </div>
     
           <Footer/>
+  </div>
+  <div v-else>
+    <Spinner />
+</div>
+    </div>
+  <div v-else>
+    <Spinner />
+</div>
+  <!-- </div>
+  <div v-else>
+    <div class="container">
+        <div class="row vh-100 d-flex justify-content-center align-content-center">
+          <div class="text-center">
+            <h2>Apologies, You are not an Admin<br/>Only Admins Are Allowed Here</h2>
+              <router-link to="/"><a class="btn btn-dark">Back to Homepage</a></router-link>
+          </div>
+        </div>
+      </div>
+</div> -->
   </template>
   
   <script>
   import axios from "axios";
   import Navbar from '../components/Navbar.vue';
-//   import Footer from '../components/Footer.vue';
+  import Footer from '../components/Footer.vue';
+  import Spinner from '../components/Spinner.vue'
 //   import AddUser from '../components/AddUser.vue';
 //   import UpdateUser from "../components/UpdateUser.vue";
     export default {
       name: 'Admin',
       components: {
-        Navbar
+        Navbar, Footer, Spinner
       },
       data() {
         return {
@@ -196,44 +239,91 @@
             lastName: "",
             userEmail: "",
             userPass: "", 
+            },
+
+            addPro: {
+            prodName: "",
+            prodDescription: "",
+            brand: "",
+            price: "", 
+            prodQuantity: "",
+            imgURL: "",
             }
             
         };
     },
       mounted() {
             this.$store.dispatch("getUsers"),
+            this.$store.dispatch("getUser"),
             this.$store.dispatch("getProducts");
     },
     computed: {
         users() {
             return this.$store.state.users;
         },
+        user() {
+            return this.$store.state.user;
+        },
         products() {
             return this.$store.state.products;
         },
+        admin() {
+            return this.$store.state.admin;
+      },
     },
     methods: {
-      async registerUser() {
-           await this.$store.dispatch("registerUser", this.register);
+      async addUser() {
+           await this.$store.dispatch("addUser", this.register);
             this.register.firstName = "";
             this.register.lastName = "";
             this.register.userEmail = "";
             this.register.userPass = "";
             },
+
+            async addProduct() {
+           await this.$store.dispatch("addProduct", this.addPro);
+           this.addPro.prodName = "";
+           this.addPro.prodDescription = "";
+           this.addPro.brand = "";
+           this.addPro.price = "";
+           this.addPro.prodQuantity = "";
+           this.addPro.imgURL = "";
+            },
+
+            addProduct() {
+          this.$store.dispatch("addProduct");
+          return console.log("Product was created");
+        },
+
         deleteUser(id) {
           this.$store.dispatch("deleteUser", id);
           return console.log("User was deleted");
         },
+
         deleteProduct(id) {
           this.$store.dispatch("deleteProduct", id);
           return console.log("Product was deleted");
-        }
+        },
+
+        setTimeout() {
+          document.location.reload();
+       },
+
+       toggle: function(){
+        document.querySelector("#icon").style.display = "inline-block";
+        document.querySelector("#logs").style.display = "none";
+       }
+
     }
   };
   
   </script>
   
   <style scoped>
+
+i{
+    display: none;
+}
 
   .btn{
     border-radius: 0px !important;
@@ -297,6 +387,10 @@
       height: 40px;
       color: white;
     height: 150px;
+  }
+
+  .modal-body form input{
+    border-radius: 0px;
   }
   
   .modal-header{

@@ -1,5 +1,5 @@
 <template>
-  <div class="everything">
+  <div class="everything" v-if="items">
     <Navbar/>
   <div class="intro">
     <video autoplay loop muted playsinline class="vid">
@@ -7,10 +7,17 @@
     </video>
   </div>
   <div class="container">
-    <h1>Our Sneakers</h1>
     <div class="row justify-content-center">
+      <div>
+        <h1>Our Sneakers</h1>
+        <select v-model="sort" @change="sortItems" class="form-select">
+                <option value="" selected disabled>Sort Alphabetically</option>
+                <option value="desc">A-Z</option>
+                <option value="asc">Z-A</option>
+              </select>
+      </div>
       <div class="col-md-4 mt-5 sneaks" v-for="item in items" :key="item.id">
-              <div class="card">
+              <div class="card homeCard">
                 <img :src="item.imgURL" alt="" class="card-img-top w-100" style="height: 300px;">
                 <div class="card-body">
                   <h3 class="card-title my-2">{{ item.prodName }}</h3>
@@ -22,11 +29,19 @@
                     </div>
                 </div>
               </div>
-            </div>
+            </div>  
     </div>
   </div>
   <Footer/>
-  </div>
+</div>
+<div v-else>
+    <Spinner />
+</div>
+  
+
+ 
+
+  
   
   
 </template>
@@ -35,9 +50,10 @@
 import axios from "axios";
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import Spinner from '../components/Spinner.vue'
   export default {
       name: 'HomeView',
-      components: {Navbar, Footer},
+      components: {Navbar, Footer, Spinner},
       data() {
      return {
          items: this.$store.state.products,
@@ -45,19 +61,60 @@ import Footer from '../components/Footer.vue'
  },
  
  computed: {
-        products() {
-            return this.$store.state.products?.filter(products => { let isMatch = true; if (!products.title.toLowerCase().includes(this.search.toLowerCase())) { isMatch = false; } return isMatch });
+        items() {
+            return this.$store.state.products;
         },
     },
     mounted() {
         this.$store.dispatch("getProducts");
         this.$store.commit("setSingleProduct", null);
     },
+
+      // search: function(){
+      //   searchInput = document.querySelector("[data-search]")
+
+      //   searchInput.addEventListener("input", e => {
+      //     const value = e.target.value
+      //     items.forEach(item => {
+      //       const isVisible = item.prodName.includes(value)
+      //       item.element.classList.toggle("hide", !isVisible)
+      //     })
+      //   })
+      // }
+
+  //     methods: {
+  //       sortItems() {
+  //     let items = this.$store.state.products;
+  //     let sorting = this.sort;
+  //     if (sorting === "desc") {
+  //       items.sort(function (a, z) {
+  //         var nameA = a.product.toLowerCase(),
+  //           nameB = z.product.toLowerCase();
+  //         if (nameA < nameB)
+  //           //sort string ascending
+  //           return -1;
+  //         if (nameA > nameB) return 1;
+  //         return 0; //default return value (no sorting)
+  //       });
+  //     } else if (sorting === "asc") {
+  //       items.sort(function (a, ) {
+  //         var nameA = a.product.toLowerCase(),
+  //           nameB = b.product.toLowerCase();
+  //         if (nameA > nameB)
+  //           //sort string ascending
+  //           return -1;
+  //         if (nameA < nameB) return 1;
+  //         return 0; //default return value (no sorting)
+  //       });
+  //     }
+  //   },
+  // },
 };
 
 </script>
 
 <style>
+
 
 .intro{
     overflow-x: hidden;
@@ -68,6 +125,7 @@ import Footer from '../components/Footer.vue'
 }
 
 .container{
+  justify-content: center;
   margin-top: 5vh;
 }
 
@@ -75,10 +133,21 @@ import Footer from '../components/Footer.vue'
   text-align: center;
 }
 
-.card{
+.sneaks{
+  min-width: 360px;
+}
+.homeCard{
   border-radius: 0px;
-  max-height: 420px; 
-  max-width: 450px;
+  height: 420px; 
+  max-width: 510px;
+}
+
+.col{
+  justify-content: center;
+}
+
+.card img{
+  max-width: 510px;
 }
 
 .deats{
@@ -107,6 +176,12 @@ import Footer from '../components/Footer.vue'
   .intro video{
     margin-top: 20vh;
   }
+}
+
+@media screen and (width <= 375px) {
+  .sneaks{
+  min-width: 300px;
+}
 }
 
 </style>

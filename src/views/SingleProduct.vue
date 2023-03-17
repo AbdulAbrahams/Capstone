@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 my-4">
-                <div class="card" >
+                <div class="card">
                 <img :src="product.imgURL" alt="" class="card-img-top w-100" style="max-height: 320px;">
               </div>
                 </div>
@@ -13,22 +13,28 @@
                 <p>{{ product.prodDescription }}</p> 
                 <div class="row mx-2">
                     <button class="col-6 price">${{ product.price }}</button>
-                    <button class="my-5 buy col-6">Add to Cart</button>
+                    <button class="my-5 buy col-6" v-on:click="Alert">Add to Cart</button>
                 </div>
                 </div>
             </div>
         </div>
+        <Footer/>
     </div>
-    <Footer/>
+    <div v-else>
+        <Spinner />
+    </div>
+
+    
         
 </template>
 <script>
+import Spinner from '../components/Spinner.vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 export default {
     props: ['id'],
     name: 'SingleProduct',
-    components: {Navbar, Footer},
+    components: {Navbar, Footer, Spinner},
     computed: {
         product() {
             return this.$store.state.product;
@@ -38,6 +44,12 @@ export default {
         this.$store.dispatch("getSingleProduct", this.$route.params.id);
         console.log();
     },
+
+    methods: {
+        Alert: function(){
+            alert("Item added to Cart")
+       }
+    }
 };
 </script>
 
@@ -60,7 +72,7 @@ export default {
 }
 
 .price{
-    font-size: 28px;
+    font-size: 26px;
     background: transparent;
     border: 0px;
     color: rgb(16, 114, 16);

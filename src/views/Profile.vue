@@ -1,7 +1,8 @@
 <template>
-    <Navbar/>
+    <div v-if="user">
+       <Navbar/>
     <div class="profile">
-        <div v-if="user" class="single">
+        <div class="single">
            <div class="main container justify-content-center">
                 <div class="row justify-content-center">
                     <div class="col-md-4 my-5 mt-1 prof">
@@ -38,7 +39,7 @@
                                 <div class="col aboutHead">
                                     Email
                                 </div>
-                                <div class="col-8">
+                                <div class="col-8 email">
                                     {{ user.userEmail }}
                                 </div>
                         </div>
@@ -48,16 +49,23 @@
         </div>
         </div>
         <Footer/>
-        </div>
+        </div> 
+    </div>
+
+    <div v-else>
+      <Spinner />
+    </div>
+    
 </template>
 
 <script>
 import axios from "axios";
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import Spinner from '../components/Spinner.vue'
     export default {
         name: 'Profile', 
-        components: {Navbar, Footer} ,
+        components: {Navbar, Footer, Spinner} ,
         computed: {
         user() {
             return this.$store.state.user;
@@ -71,7 +79,7 @@ import Footer from '../components/Footer.vue'
         LogOut() {
        this.$store.state.user = null
        localStorage.clear()
-       this.$router.push("/login");
+       this.$router.push("/");
     }
 }
 }
@@ -86,7 +94,7 @@ import Footer from '../components/Footer.vue'
     justify-content: center;
     align-items: center;
     /* overflow-x: hidden; */
-    margin-top: 120px;
+    margin-top: 130px;
     min-height: 120vh;
 }
 
@@ -126,6 +134,7 @@ import Footer from '../components/Footer.vue'
 }
 
 .col-8{
+    word-wrap: break-word;   
     font-size: 18px;
 }
 
