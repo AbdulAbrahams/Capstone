@@ -35,7 +35,7 @@ class User {
             {expiresIn: "1 year"},
             (err, token) => {
               if (err) throw err;
-              res.json({ token, data });
+              res.status(201).cookie(token).json({ token, data });
             }
           );
         }
