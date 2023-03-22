@@ -58,7 +58,7 @@ route.get('/product/:id', (req, res) => {
 });
 
 
-route.post('/products', bodyParser.json(), (req, res) => {
+route.post('/product', bodyParser.json(), (req, res) => {
     product.addProduct(req, res);
 })
 
