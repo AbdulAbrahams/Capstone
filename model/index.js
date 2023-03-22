@@ -158,97 +158,69 @@ class Product {
 }
 
 class Cart{
-    fetchCart(req, res) {
-
-      db.query(`SELECT cart FROM users WHERE id = ${req.params.id};`, (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-            let cart;
-            if (results[0].cart == null) {
-                cart = [];
+  fetchCart(req, res) {
+        db.query("SELECT cart FROM users WHERE userID = ?", [req.params.id], (err, result) => {
+          if (err) throw err;
+          (function Check(A, B) {
+            A = parseInt(req.user.id);
+            B = parseInt(req.params.id);
+            if (A === B) {
+              res.send(result[0].cart);
             } else {
-                cart = JSON.parse(results[0].cart);
+              res.json({msg: "Please Login"});
             }
-            let { id } = req.body;
-
-            db.query(`Select * FROM products WHERE id = ?`, id, (err, productData) => {
-                if (err) res.send(`${err}`);
-                let data = {
-                    cart_id: cart.length + 1,
-                    productData,
-                };
-                cart.push(data);
-                console.log(cart);
-
-                db.query(`UPDATE users SET cart = ? WHERE id = ${req.params.id}`, JSON.stringify(cart), (err, results) => {
-                    if (err) throw err;
-                    res.json({
-                        status: 200,
-                        cart: results,
-                    });
-                });
-            });
-        }
-    });
-  }
-
-    addCart(req, res) {
-
-  db.query(`SELECT * FROM users WHERE id = ${req.params.id};`, [req.params.id], (err, results) => {
-      if (results.length < 1) {
-          res.json({
-              status: 400,
-              msg: `Failed to view cart item`
-          });
+          })();
+        });
       }
-      let cartResults = JSON.parse(results[0].cart);
-      res.json({
-          status: 200,
-          results: cartResults.filter((item) => {
-              return item.cart_id == req.params.cartID;
-          }),
-      });
-  });
-    }
-
-    deleteCart(req, res) {
-
-      // const delCart = `SELECT cart FROM users WHERE id = ${req.params.id}`;
-    db.query(`SELECT cart FROM users WHERE id = ${req.params.id}`, (err, results) => {
-        if (err) {
-            res.json({
-                status: 400,
-                msg: `Failed to delete cart item`
-            });
-        }
-        if (results.length > 0) {
-            if (results[0].cart != null) {
-                const result = JSON.parse(results[0].cart).filter((cart) => {
-                    return cart.cart_id != req.params.cartID;
-                });
-                result.forEach((cart, i) => {
-                    cart.cart_id = i + 1;
-                });
-
-                // const query = ` UPDATE users SET cart = ? WHERE id = ${req.params.id}`;
-                db.query(`UPDATE users SET cart = ? WHERE id = ${req.params.id}`, [JSON.stringify(result)], (err, results) => {
-                    if (err) {
-                        res.json({
-                            status: 400,
-                            msg: `Failed to delete cart item`
-                        });
-                    } else {
-                      res.json({
-                        status: 200,
-                        results: "Item deleted from cart",
-                    });
-                    }
-                    
-                });
+  
+  addToCart(req, res) {
+        db.query(` SELECT cart FROM users WHERE userID = ?;`, req.params.id, (err, results) => {
+          if (err) throw err;
+          let cart;
+          if (results.length > 0) {
+            if (results[0].cart === null) {
+              cart = [];
+            } else {
+              cart = JSON.parse(results[0].cart);
             }
           }
+          db.query(`SELECT * FROM products WHERE id = ${id};`, async (err, results) => {
+            if (err) throw err;
+            let item = {
+              id: results[0].id,
+              prodName: results[0].prodName,
+              imgURL: results[0].imgURL,
+              brand: results[0].brand,
+              price: results[0].price,
+              prodQuantity: results[0].prodQuantity,
+              userID: results[0].userID,
+            };
+            cart.push(item);
+            db.query(`UPDATE users SET cart = ? WHERE (userID = ${req.params.id})`,JSON.stringify(cart), (err) => {
+              if (err) throw err;
+              res.json({ results, msg: "Item added to Cart"});
+            });
+          });
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+  deleteFromCart(req, res) {
+    db.query(`SELECT cart FROM users WHERE userID = ?`, req.user.id, (err, results) => {
+      if (err) throw err;
+      let item = JSON.parse(results[0].cart).filter((x) => {
+        return x.id != req.params.id;
+      });
+      db.query(`UPDATE users SET cart = ? WHERE userID= ? ;`,[JSON.stringify(item), req.user.id], (err) => {
+          if (err) throw err;
+          res.json({
+            msg: "Item Deleted from Cart",
+          });
+        }
+      );
     });
-    }
-}
+  };
+  }
 
 module.exports = { User, Product, Cart };
