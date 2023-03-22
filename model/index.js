@@ -26,6 +26,7 @@ class User {
               lastName: result[0].lastName,
               userEmail:result[0].userEmail,
               userProfile:result[0].userProfile,
+              userRole:result[0].userRole,
               userPass:result[0].userPass,
             },
           };
