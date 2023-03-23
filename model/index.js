@@ -28,6 +28,8 @@ class User {
               userProfile:result[0].userProfile,
               userRole:result[0].userRole,
               userPass:result[0].userPass,
+              cart:result[0].cart,
+              msg:result[0].msg,
             },
           };
 
