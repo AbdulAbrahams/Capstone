@@ -8,29 +8,49 @@
   </div>
   <div class="container">
     <div class="row justify-content-center">
-      <div>
+      <div class="d-flex justify-content-between">
         <h1>Our Sneakers</h1>
-        <select v-model="sort" @change="sortItems" class="form-select">
-                <option value="" selected disabled>Sort Alphabetically</option>
+        <nav class="navbar navbar-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar">
+      <img src="https://i.postimg.cc/vTWgfnFC/search-interface-symbol.png" class="icon">
+    </button>
+    <div class="offcanvas searchCan offcanvas-end" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <input class="offcanvas-title search" type="text" v-model="searching" name="name" placeholder="Search">
+      </div>
+    </div>
+  </div>
+</nav>
+        <!-- <input class="search" type="text" name="name" v-model="searching" placeholder="Search"> -->
+        <!-- <select v-model="sort" @change="sortItems" class="form-select" placeholder="Sort">
                 <option value="desc">A-Z</option>
                 <option value="asc">Z-A</option>
-              </select>
+              </select> -->
       </div>
-      <div class="col-md-4 mt-5 sneaks" v-for="item in items" :key="item.id">
-              <div class="card homeCard">
-                <img :src="item.imgURL" alt="" class="card-img-top w-100" style="height: 300px;">
-                <div class="card-body">
-                  <h3 class="card-title my-2">{{ item.prodName }}</h3>
-                    <div class="d-flex justify-content-between deats">
-                      <router-link :to="{ name: 'singleProduct', params: { id: item.id }}">
-                    <button type="button" class="btn btn-sm view">View More</button>
-                </router-link>
-                      <p class="my-1 price text-success">${{ item.price }}</p>
-                    </div>
+        <div class="col-md-4 mt-5 sneaks" v-for="item in items" :key="item.id">
+                <div class="card homeCard">
+                  <img :src="item.imgURL" alt="" class="card-img-top w-100" style="height: 300px;">
+                  <div class="card-body">
+                    <h3 class="card-title my-2">{{ item.prodName }}</h3>
+                      <div class="d-flex justify-content-between deats" v-if="user">
+                        <router-link :to="{ name: 'singleProduct', params: { id: item.id }}">
+                      <button type="button" class="btn btn-sm view">View More</button>
+                  </router-link>
+                        <p class="my-1 price text-success">${{ item.price }}</p>
+                      </div>
+                      <div v-else>
+                        <div class="d-flex justify-content-between deats">
+                        <router-link :to="{ name: 'login'}">
+                      <button type="button" class="btn btn-sm view">View More</button>
+                  </router-link>
+                        <p class="my-1 price text-success">${{ item.price }}</p>
+                      </div>
+                      </div>
+                  </div>
                 </div>
-              </div>
-            </div>  
-    </div>
+              </div>  
+      </div>
   </div>
   <Footer/>
 </div>
@@ -56,65 +76,57 @@ import Spinner from '../components/Spinner.vue'
       components: {Navbar, Footer, Spinner},
       data() {
      return {
-         items: this.$store.state.products,
+         searching: '',
      };
  },
  
  computed: {
-        items() {
+        user() {
+            return this.$store.state.user;
+        },
+        products() {
             return this.$store.state.products;
         },
+        items() {
+          if(this.searching.trim().length > 0){
+            return this.products.filter((name)=> name.prodName.toLowerCase().includes(this.searching.trim()))
+          }
+            return this.products
+        }
     },
     mounted() {
         this.$store.dispatch("getProducts");
         this.$store.commit("setSingleProduct", null);
     },
-
-      // search: function(){
-      //   searchInput = document.querySelector("[data-search]")
-
-      //   searchInput.addEventListener("input", e => {
-      //     const value = e.target.value
-      //     items.forEach(item => {
-      //       const isVisible = item.prodName.includes(value)
-      //       item.element.classList.toggle("hide", !isVisible)
-      //     })
-      //   })
-      // }
-
-  //     methods: {
-  //       sortItems() {
-  //     let items = this.$store.state.products;
-  //     let sorting = this.sort;
-  //     if (sorting === "desc") {
-  //       items.sort(function (a, z) {
-  //         var nameA = a.product.toLowerCase(),
-  //           nameB = z.product.toLowerCase();
-  //         if (nameA < nameB)
-  //           //sort string ascending
-  //           return -1;
-  //         if (nameA > nameB) return 1;
-  //         return 0; //default return value (no sorting)
-  //       });
-  //     } else if (sorting === "asc") {
-  //       items.sort(function (a, ) {
-  //         var nameA = a.product.toLowerCase(),
-  //           nameB = b.product.toLowerCase();
-  //         if (nameA > nameB)
-  //           //sort string ascending
-  //           return -1;
-  //         if (nameA < nameB) return 1;
-  //         return 0; //default return value (no sorting)
-  //       });
-  //     }
-  //   },
-  // },
 };
 
 </script>
 
 <style>
 
+
+.navbar-toggler2{
+  border: none;
+  background: transparent;
+}
+
+.icon{
+  height: 25px;
+}
+
+.search{
+  border: none;
+  background: black;
+  color: white;
+  width: 100%;
+  padding: 10px;
+}
+
+.searchCan{
+  width: 100%;
+  background: black;
+  height: 80px;
+}
 
 .intro{
     overflow-x: hidden;

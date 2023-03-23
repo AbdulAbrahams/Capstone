@@ -1,5 +1,5 @@
 <template>
-  <!-- <div v-if="admin"> -->
+<div v-if="user.userRole === 'Admin'">
      <div class="everythin" v-if="users">
     <div v-if="products">
       <Navbar/>
@@ -123,23 +123,25 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="setTimeout()"></button>
         </div>
         <div class="modal-body">
-                <p>Product Name</p>
-                  <input class="col-12 my-3" v-model="prodName" id="Name" type="text"  required>
-                <p>Product Description</p>
-                  <input class="col-12 my-3" v-model="prodDescription" id="Brand" type="text"  required>
-                <p>Brand</p>
-                  <input class="col-12 my-3" v-model="brand" id="Name" type="text"  required>
-                <p>Price</p>
-                  <input class="col-12 my-3" v-model="price" id="Price" type="text" required>
-                <p>Quantity</p>
-                  <input class="col-12 my-3" v-model="prodQuantity" id="Price" type="text" required>
-                <p>Image URL</p>
-                  <input class="col-12 my-3" v-model="imgURL" id="img" type="text"  required>
-        </div>
-        <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-          <button type="submit" class="btn btn-primary" @click="addProduct">Save changes</button>
-        </div>
+          <form @submit.prevent="addProduct" action="POST">
+            <p>Product Name</p>
+              <input class="col-12 my-3" v-model="addPro.prodName" type="text"  required>
+            <p>Product Description</p>
+              <input class="col-12 my-3" v-model="addPro.prodDescription" type="text"  required>
+            <p>Brand</p>
+              <input class="col-12 my-3" v-model="addPro.brand" type="text"  required>
+            <p>Price</p>
+              <input class="col-12 my-3" v-model="addPro.price" type="text" required>
+            <p>Quantity</p>
+              <input class="col-12 my-3" v-model="addPro.prodQuantity" type="text" required>
+            <p>Image URL</p>
+              <input class="col-12 my-3" v-model="addPro.imgURL" type="text"  required>
+
+              <div class="modal-footer">
+      <button type="submit" class="btn btn-light" v-on:click="toggle"><span id="log">Add Product</span><i class="fa fa-spinner fa-spin" id="icon2"></i></button>
+    </div>
+            </form>
+    </div>
       </div>
     </div>
   </div>
@@ -207,7 +209,7 @@
   <div v-else>
     <Spinner />
 </div>
-  <!-- </div>
+  </div>
   <div v-else>
     <div class="container">
         <div class="row vh-100 d-flex justify-content-center align-content-center">
@@ -217,7 +219,8 @@
           </div>
         </div>
       </div>
-</div> -->
+  </div>
+  
   </template>
   
   <script>
@@ -267,9 +270,6 @@
         products() {
             return this.$store.state.products;
         },
-        admin() {
-            return this.$store.state.admin;
-      },
     },
     methods: {
       async addUser() {
@@ -290,11 +290,6 @@
            this.addPro.imgURL = "";
             },
 
-            addProduct() {
-          this.$store.dispatch("addProduct");
-          return console.log("Product was created");
-        },
-
         deleteUser(id) {
           this.$store.dispatch("deleteUser", id);
           return console.log("User was deleted");
@@ -311,7 +306,9 @@
 
        toggle: function(){
         document.querySelector("#icon").style.display = "inline-block";
+        document.querySelector("#icon2").style.display = "inline-block";
         document.querySelector("#logs").style.display = "none";
+        document.querySelector("#log").style.display = "none";
        }
 
     }

@@ -1,8 +1,10 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import router from "@/router";
+import { useCookies } from 'vue3-cookies'
+const { cookies } = useCookies()
 
-const Supremium = "https://supremium2.onrender.com/";
+// const Supremium = "https://supremium2.onrender.com/";
 
 export default createStore({
   state: {
@@ -10,9 +12,8 @@ export default createStore({
     user: null || JSON.parse(localStorage.getItem("user")),
     products: null,
     product: null,
-    token: null,
+    token: null  || localStorage.getItem("token"),
     cart: null,
-    admin: null,
 
   },
   getters: {
@@ -83,9 +84,9 @@ export default createStore({
           ) {
           } else {
             console.log("Logged in");
-            console.log(data.data.user);
+            console.log(data.token);
             context.commit("setUser", data.data.user);        
-            sessionStorage.getItem("token")
+            cookies.set("token", data.token)
             router.push({ name: "home" });
           }
         });
@@ -154,7 +155,7 @@ export default createStore({
         .then((data) => {
           context.dispatch("getUser");
           console.log(data);
-          router.push({ name: "admin" });
+          document.location.reload()
         });
     },
 
@@ -188,22 +189,26 @@ export default createStore({
     },
 
     addProduct: async (context, payload) => {
-      const { prodName, price, brand, prodDescription, imgURL } = payload;
-
-      try {
-        await fetch("https://supremium2.onrender.com/products/", {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-          body: JSON.stringify({ payload }),
-        })
-          .then((response) => response.json)
-          .then((json) => context.commit("setProducts", json.data));
-        router.push({ name: "Admin" });
-      } catch (e) {
-        console.log(e);
-      }
+      console.log(payload)
+      const { prodName, prodDescription, brand, price, prodQuantity, imgURL } = payload;
+      await fetch("https://supremium2.onrender.com/product", {
+        method: "POST",
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+        body: JSON.stringify({ 
+          prodName: prodName,
+          prodDescription: prodDescription,
+          brand: brand,
+          price: price, 
+          prodQuantity: prodQuantity, 
+          imgURL: imgURL 
+        }),
+      })
+        .then((response) => response.json())
+        .then((json) =>
+          context.commit("setProducts", json,
+            router.push({name: "admin"})
+          )
+        );
     },
 
     deleteProduct: async (context, id) => {
@@ -227,6 +232,51 @@ export default createStore({
           context.dispatch("getSingleProducts");
           console.log(data);
           router.push({ name: "admin" });
+        });
+    },
+
+    getCart: async (context, userID) => {
+      userID = context.state.user.userID
+          await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
+          method: "GET",
+          headers: {"Content-type": "application/json; charset=UTF-8"},
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data != null) {
+            context.commit("setCart", JSON.parse(data));
+          } else {
+            context.commit("setCart", null);
+          }
+        });
+    },
+    addToCart: async (context, item, userID) => {
+      console.log(item);
+      userID = context.state.user.userID;
+        await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
+          method: "POST",
+          body: JSON.stringify(item),
+          headers: {"Content-type": "application/json; charset=UTF-8"},
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          // context.state.msg = data.msg;
+          context.dispatch("getCart", userID, data);
+        });
+    },
+
+    deleteWishlistItem: async (context, list, userID) => {
+      userID = context.state.user.userID;
+      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart/" + list.cartID,
+          {
+            method: "DELETE",
+            headers: {"Content-type": "application/json; charset=UTF-8"},
+          }
+        )
+        .then((res) => res.json())
+        .then((data) => {
+          // context.state.msg = data.msg;
+          context.dispatch("getCart", userID);
         });
     },
   },

@@ -1,28 +1,63 @@
 <template>
+    <div v-if="user">
     <Navbar/>
-    <div class="body">
-        <div class="container loginbox p-2  animate__animated animate__fadeIn">
-            <h1 class="my-4 head">Checkout</h1>
-            <div class="row justify-content-center">
-                <div class="col products"> Products</div>
-                <div class="col price">Price</div>
+    <div v-if="Cart">
+        <div class="body" v-for="item in Cart" :key="item">
+            <div class="container loginbox p-2  animate__animated animate__fadeIn">
+                <h1 class="my-4 head">Checkout</h1>
+                <div class="row justify-content-center">
+                    <div class="col products"> Products</div>
+                    <div>
+                        <img :src="item.imgURL">
+                    </div>
+                    <div class="col price">Price</div>
+                    <div>{{ item.price }}</div>
+                </div>
+        </div>
             </div>
     </div>
+            <Footer/>
+    </div>
+
+    <div v-else>
+    <div class="container">
+        <div class="row vh-100 d-flex justify-content-center align-content-center">
+          <div class="text-center">
+            <h2>You are not Logged In<br/>Please Log In</h2>
+              <router-link to="/login"><a class="btn btn-dark mx-2">Login</a></router-link>
+              <router-link to="/"><a class="btn btn-dark mx-2">Back to Homepage</a></router-link>
+          </div>
         </div>
+      </div>
+</div>
 </template>
 
 <script>
 import 'animate.css';
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
     export default {
         name: 'Login',
-        components: {Navbar},
+        components: {Navbar, Footer},
         data() {
         return {
            userEmail: "",
            userPass: "",
         };
     },
+    computed: {
+        user() {
+            return this.$store.state.user;
+        },
+        Cart() {
+            return this.$store.state.cart
+        },
+    },
+
+    mounted() {
+        this.$store.dispatch("getCart", this.id)
+    },
+
     methods: {
        async loginUser () {
        const payload = {
@@ -116,6 +151,10 @@ h1{
 
 .log{
     font-family: 'Syne', sans-serif !important;
+}
+
+.btn{
+    border-radius: 0px;
 }
 
 </style>

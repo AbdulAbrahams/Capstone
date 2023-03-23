@@ -13,7 +13,7 @@
                 <p>{{ product.prodDescription }}</p> 
                 <div class="row mx-2">
                     <button class="col-6 price">${{ product.price }}</button>
-                    <button class="my-5 buy col-6" v-on:click="Alert">Add to Cart</button>
+                    <button class="my-5 buy col-6" @click="addCart">Add to Cart</button>
                 </div>
                 </div>
             </div>
@@ -46,11 +46,17 @@ export default {
     },
 
     methods: {
-        Alert: function(){
-            alert("Item added to Cart")
-       }
+        addCart() {
+      this.$store.dispatch("addToCart", {
+        userID: this.userID,
+      })
     }
-};
+  }
+}
+
+    //     Alert() {
+    //         alert("Item added to Cart")
+    //    }
 </script>
 
 <style>

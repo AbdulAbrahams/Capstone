@@ -19,12 +19,13 @@
                     <div class="col-md-8 my-5 mt-1 about">
                         <div class=" mx">
                             <h1>Profile</h1>
+                            <!-- <form @submit.prevent="editUser" action="POST">
                             <div class="row my-5 aboutRow">
                                 <div class="col aboutHead">
                                     First Name
                                 </div>
                                 <div class="col-8">
-                                    {{ user.firstName }}
+                                    <input type="text" v-model="user.firstName">
                                 </div>
                             </div>
                             <div class="row my-5 aboutRow">
@@ -43,6 +44,22 @@
                                     {{ user.userEmail }}
                                 </div>
                         </div>
+                        <button @click="this.$store.dispatch('editUser', user)" class="btn btn-dark" id="submit">Save Changes</button>
+                        </form> -->
+
+            <form autocomplete="off" @submit.prevent="editUser" method="POST">
+                <p>First Name</p>
+                <input class="col-12 my-3" id="Name" type="text" v-model="user.firstName" required>
+                <p>Last Name</p>
+                <input class="col-12 my-3" id="Brand" type="text" v-model="user.lastName" required>
+                <p>Email Address</p>
+                <input class="col-12 my-3 emailAdd" id="Price" type="text" v-model="user.userEmail" required>
+                <p>Profile Image</p>
+                <input class="col-12 my-3" id="img" type="text" v-model="user.userProfile" required>
+                <div class="modal-footer">
+                    <button @click="this.$store.dispatch('editUser', user)" class="btn btn-dark" id="submit">Save Changes</button>
+                </div>
+            </form>
                 </div>
             </div>
         </div>
@@ -67,6 +84,7 @@ import Spinner from '../components/Spinner.vue'
         name: 'Profile', 
         components: {Navbar, Footer, Spinner} ,
         computed: {
+
         user() {
             return this.$store.state.user;
         },
