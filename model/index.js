@@ -49,14 +49,14 @@ class User {
 
   fetchUsers(req, res) {
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userRole, userProfile FROM users;`, (err, data) => {
+    database.query(`SELECT * FROM users;`, (err, data) => {
       if (err) throw err;
       else res.status(200).json({ results: data });
     });
   }
   fetchUser(req, res) {
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userRole, userProfile FROM users WHERE userID = ?;`, [req.params.id], (err, data) => {
+    database.query(`SELECT * FROM users WHERE userID = ?;`, [req.params.id], (err, data) => {
       if (err) throw err;
       else res.status(200).json({ result: data });
     });
@@ -160,7 +160,7 @@ class Product {
 
 class Cart{
   fetchCart(req, res) {
-        db.query("SELECT cart FROM users WHERE userID = ?", [req.params.id], (err, result) => {
+        database.query("SELECT cart FROM users WHERE userID = ?", [req.params.id], (err, result) => {
           if (err) throw err;
           (function Check(A, B) {
             A = parseInt(req.user.id);
@@ -175,7 +175,7 @@ class Cart{
       }
   
   addToCart(req, res) {
-        db.query(` SELECT cart FROM users WHERE userID = ?;`, req.params.id, (err, results) => {
+        database.query(` SELECT cart FROM users WHERE userID = ${req.params.id};`, req.params.id, (err, results) => {
           if (err) throw err;
           let cart;
           if (results.length > 0) {
@@ -185,7 +185,8 @@ class Cart{
               cart = JSON.parse(results[0].cart);
             }
           }
-          db.query(`SELECT * FROM products WHERE id = ${id};`, async (err, results) => {
+          let id = req.body.id
+          database.query(`SELECT * FROM products WHERE id = ${id};`, async (err, results) => {
             if (err) throw err;
             let item = {
               id: results[0].id,
@@ -197,7 +198,7 @@ class Cart{
               userID: results[0].userID,
             };
             cart.push(item);
-            db.query(`UPDATE users SET cart = ? WHERE (userID = ${req.params.id})`,JSON.stringify(cart), (err) => {
+            database.query(`UPDATE users SET cart = ? WHERE (userID = ${req.params.id})`,JSON.stringify(cart), (err) => {
               if (err) throw err;
               res.json({ results, msg: "Item added to Cart"});
             });
@@ -208,12 +209,12 @@ class Cart{
       }
 
   deleteFromCart(req, res) {
-    db.query(`SELECT cart FROM users WHERE userID = ?`, req.user.id, (err, results) => {
+    database.query(`SELECT cart FROM users WHERE userID = ${req.params.id}`, req.params.id, (err, results) => {
       if (err) throw err;
       let item = JSON.parse(results[0].cart).filter((x) => {
         return x.id != req.params.id;
       });
-      db.query(`UPDATE users SET cart = ? WHERE userID= ? ;`,[JSON.stringify(item), req.user.id], (err) => {
+      database.query(`UPDATE users SET cart = ? WHERE userID= ${req.params.id};`,[JSON.stringify(item), req.params.id], (err) => {
           if (err) throw err;
           res.json({
             msg: "Item Deleted from Cart",
