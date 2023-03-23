@@ -13,11 +13,11 @@ class User {
     WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
       if (result.length === 0) {
-        res.send("Email not found please register");
+        res.json({msg: "You have entered an incorrect Email or Password. Please try again." });
       } else {
         const passMatch = await compare(req.body.userPass, result[0].userPass);
         if (!passMatch) {
-          res.send("Password is incorrect");
+          res.json({msg: "You have entered an incorrect Email or Password. Please try again." });
         } else {
           const data = {
             user: {
