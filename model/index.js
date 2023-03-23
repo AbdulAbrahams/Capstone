@@ -160,10 +160,10 @@ class Product {
 
 class Cart{
   fetchCart(req, res) {
-        database.query("SELECT cart FROM users WHERE userID = ?", [req.params.id], (err, result) => {
+        database.query(`SELECT cart FROM users WHERE userID = ${req.params.id}`, req.params.id, (err, result) => {
           if (err) throw err;
           (function Check(A, B) {
-            A = parseInt(req.user.id);
+            A = parseInt(req.params.id);
             B = parseInt(req.params.id);
             if (A === B) {
               res.send(result[0].cart);
