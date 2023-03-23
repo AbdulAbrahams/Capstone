@@ -8,9 +8,7 @@ class User {
   login(req, res) {
     const { userEmail, userPass } = req.body;
 
-    database.query(`SELECT userID, firstName, lastName, userEmail, userPass, userRole, userProfile
-    FROM users 
-    WHERE userEmail = '${userEmail}';`, async (err, result) => {
+    database.query(`SELECT * FROM users WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
       if (result.length === 0) {
         res.json({msg: "You have entered an incorrect Email or Password. Please try again." });
