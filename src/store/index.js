@@ -41,8 +41,12 @@ export default createStore({
       state.product = product;
     },
 
-    setCart(state, cart) {
-      state.cart = cart;
+    setCart: (state, cart) => {
+      if (cart === null) {
+        state.cart = null;
+      } else {
+        state.cart = cart;
+      }
     },
   },
   actions: {
@@ -79,9 +83,9 @@ export default createStore({
         .then((response) => response.json())
         .then((data) => {
           if (
-            data.msg ===
-            " You have entered an incorrect Email or Password. Please try again."
+           data.msg === " You have entered an incorrect Email or Password. Please try again."
           ) {
+            alert( "You have entered an incorrect Email or Password. Please try again." );
           } else {
             console.log("Logged in");
             console.log(data.token);
@@ -235,24 +239,43 @@ export default createStore({
         });
     },
 
+
+
+    // getCart: async (context, userID) => {
+    //   userID = context.state.user.userID
+    //       await fetch("http://localhost:6060/users/" + userID + "/cart", {
+    //       method: "GET",
+    //       headers: {"Content-type": "application/json; charset=UTF-8"},
+    //     })
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       if (data != null) {
+    //         context.commit("setCart", JSON.parse(data));
+    //       } else {
+    //         context.commit("setCart", null);
+    //       }
+    //     });
+    // },
+
     getCart: async (context, userID) => {
       userID = context.state.user.userID
-          await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
+      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
           method: "GET",
-          headers: {"Content-type": "application/json; charset=UTF-8"},
         })
         .then((res) => res.json())
         .then((data) => {
-          if (data != null) {
-            context.commit("setCart", JSON.parse(data));
-          } else {
-            context.commit("setCart", null);
-          }
+          console.log(data)
+          // if (data != null) {
+          //   context.commit("setwishlist", JSON.parse(data));
+          // } else {
+          //   context.commit("setwishlist", null);
+          // }
         });
     },
+    
     addToCart: async (context, item, userID) => {
-      console.log(item);
       userID = context.state.user.userID;
+      // console.log(userID);
         await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
           method: "POST",
           body: JSON.stringify(item),
@@ -261,11 +284,11 @@ export default createStore({
         .then((res) => res.json())
         .then((data) => {
           // context.state.msg = data.msg;
-          context.dispatch("getCart", userID, data);
+          context.dispatch("getCart", data);
         });
     },
 
-    deleteWishlistItem: async (context, list, userID) => {
+    deleteFromCart: async (context, list, userID) => {
       userID = context.state.user.userID;
       await fetch("https://supremium2.onrender.com/users/" + userID + "/cart/" + list.cartID,
           {

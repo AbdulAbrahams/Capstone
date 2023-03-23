@@ -136,6 +136,7 @@
 import 'animate.css';
 import axios from "axios";
 import { useCookies } from 'vue3-cookies';
+import router from "@/router";
     export default {
         name: 'Navbar',
         computed: {
@@ -155,7 +156,7 @@ import { useCookies } from 'vue3-cookies';
       this.$store.state.user = null
       localStorage.clear()
       this.$cookie.delete('token');
-      this.$router.push("/");
+      this.router.push("home");
       }  
     },
 };

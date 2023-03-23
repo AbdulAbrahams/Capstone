@@ -1,25 +1,42 @@
 <template>
-    <div v-if="user">
-    <Navbar/>
-    <div v-if="Cart">
-        <div class="body" v-for="item in Cart" :key="item">
-            <div class="container loginbox p-2  animate__animated animate__fadeIn">
+    <!-- <div v-if="user"> -->
+    <!-- <Navbar/> -->
+    <div v-if="cart">
+        <h1>heading</h1>
+        <div class="body">
+            <div class="container loginbox p-2  animate__animated animate__fadeIn" v-for="item in cart" :key="item.id">
                 <h1 class="my-4 head">Checkout</h1>
-                <div class="row justify-content-center">
-                    <div class="col products"> Products</div>
+                <div class="row justify-content-center" >
+                    <div class="col products">Products</div>
                     <div>
-                        <img :src="item.imgURL">
+                        <img :src="item.imgURL" alt="">
                     </div>
                     <div class="col price">Price</div>
-                    <div>{{ item.price }}</div>
+                    <div>${{ item.price }}</div>
                 </div>
         </div>
             </div>
     </div>
+    <!-- <div v-else>
+        <h1>Blah</h1>
+         <div class="body">
+            <div class="container loginbox p-2  animate__animated animate__fadeIn">
+                <h1 class="my-4 head">Checkout</h1>
+                <div class="row justify-content-center">
+                    <div class="col products">Products</div>
+                    <div>
+                        <img :src="user.cart.imgURL">
+                    </div>
+                    <div class="col price">Price</div>
+                    <div>$</div>
+                </div>
+        </div>
+            </div> -->
             <Footer/>
-    </div>
+    <!-- </div>  -->
+    <!-- </div> -->
 
-    <div v-else>
+    <!-- <div v-else>
     <div class="container">
         <div class="row vh-100 d-flex justify-content-center align-content-center">
           <div class="text-center">
@@ -29,7 +46,7 @@
           </div>
         </div>
       </div>
-</div>
+</div> -->
 </template>
 
 <script>
@@ -37,35 +54,23 @@ import 'animate.css';
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
     export default {
-        name: 'Login',
+        name: 'Checkout',
         components: {Navbar, Footer},
-        data() {
-        return {
-           userEmail: "",
-           userPass: "",
-        };
-    },
     computed: {
-        user() {
-            return this.$store.state.user;
-        },
-        Cart() {
-            return this.$store.state.cart
+        // user() {
+        //     return this.$store.state.user;
+        // },
+        cart() {
+            console.log(this.$store.state.cart)
+            // return this.$store.state.user.cart
         },
     },
 
     mounted() {
-        this.$store.dispatch("getCart", this.id)
+        this.$store.dispatch("getCart", this.userID)
     },
 
     methods: {
-       async loginUser () {
-       const payload = {
-            userEmail: this.userEmail,
-            userPass: this.userPass
-        };
-        await this.$store.dispatch("loginUser", payload)
-       },
     }
 }
 </script>
