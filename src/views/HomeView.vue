@@ -84,8 +84,8 @@ import Spinner from '../components/Spinner.vue'
             return this.$store.state.products;
         },
         items() {
-          if(this.searching.trim().length > 0){
-            return this.products.filter((name)=> name.prodName.toLowerCase().includes(this.searching.trim()))
+          if(this.searching.toLowerCase().trim().length > 0){
+            return this.products.filter((name)=> name.prodName.toLowerCase().includes(this.searching.toLowerCase().trim()))
           }
             return this.products
         }
