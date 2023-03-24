@@ -37,7 +37,7 @@
                       </div>
                       <div v-else>
                         <div class="d-flex justify-content-between deats">
-                        <router-link :to="{ name: 'login'}">
+                        <router-link :to="{ name: 'checkout'}">
                       <button type="button" class="btn btn-sm view">View More</button>
                   </router-link>
                         <p class="my-1 price text-success">${{ item.price }}</p>
