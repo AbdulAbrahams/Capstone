@@ -22,12 +22,8 @@
     </div>
   </div>
 </nav>
-        <!-- <input class="search" type="text" name="name" v-model="searching" placeholder="Search"> -->
-        <!-- <select v-model="sort" @change="sortItems" class="form-select" placeholder="Sort">
-                <option value="desc">A-Z</option>
-                <option value="asc">Z-A</option>
-              </select> -->
       </div>
+      <button class="sort my-3" @click="sortPrice">Sort by Price</button>
         <div class="col-md-4 mt-5 sneaks" v-for="item in items" :key="item.id">
                 <div class="card homeCard">
                   <img :src="item.imgURL" alt="" class="card-img-top w-100" style="height: 300px;">
@@ -98,11 +94,22 @@ import Spinner from '../components/Spinner.vue'
         this.$store.dispatch("getProducts");
         this.$store.commit("setSingleProduct", null);
     },
+
+    methods: {
+        sortPrice() {
+            this.$store.commit("sortPrice")
+        },
+      }
 };
 
 </script>
 
 <style>
+
+.sort{
+  border: none;
+  background: transparent;
+}
 
 
 .navbar-toggler2{

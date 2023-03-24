@@ -41,6 +41,16 @@ export default createStore({
       state.product = product;
     },
 
+    sortPrice: (state) => {
+      state.products.sort((a, b)=> {
+        return a.price - b.price;
+      })
+      if(!state.asc) {
+        state.products.reverse()
+      }
+      state.asc =!state.asc
+    },
+
     setCart: (state, cart) => {
       if (cart === null) {
         state.cart = null;
@@ -63,15 +73,16 @@ export default createStore({
         }),
       })
         .then((response) => response.json())
-        .then((json) =>
-          context.commit(
-            "setUsers",
-            json,
-            router.push({
-              name: "login",
-            })
-          )
-        );
+        .then((data) => {
+          if (data.err === "Email already in use") {
+            alert( "Email already in use." );
+            document.location.reload();
+          } else {
+            console.log("Registered");
+          context.commit("setUsers", data)
+            router.push({name: "login"})
+          }
+        });
     },
 
     async loginUser(context, payload) {
@@ -82,13 +93,11 @@ export default createStore({
       })
         .then((response) => response.json())
         .then((data) => {
-          if (
-           data.msg === " You have entered an incorrect Email or Password. Please try again."
-          ) {
+          if (data.err === "You entered an incorrect password or not registered. Please try again") {
             alert( "You have entered an incorrect Email or Password. Please try again." );
+            document.location.reload();
           } else {
             console.log("Logged in");
-            console.log(data.token);
             context.commit("setUser", data.data.user);        
             cookies.set("token", data.token)
             router.push({ name: "home" });
@@ -239,43 +248,24 @@ export default createStore({
         });
     },
 
-
-
-    // getCart: async (context, userID) => {
-    //   userID = context.state.user.userID
-    //       await fetch("http://localhost:6060/users/" + userID + "/cart", {
-    //       method: "GET",
-    //       headers: {"Content-type": "application/json; charset=UTF-8"},
-    //     })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       if (data != null) {
-    //         context.commit("setCart", JSON.parse(data));
-    //       } else {
-    //         context.commit("setCart", null);
-    //       }
-    //     });
-    // },
-
     getCart: async (context, userID) => {
       userID = context.state.user.userID
-      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
+      await fetch(`https://supremium2.onrender.com/users/${userID}/cart`, {
           method: "GET",
         })
         .then((res) => res.json())
         .then((data) => {
           console.log(data)
-          // if (data != null) {
-          //   context.commit("setwishlist", JSON.parse(data));
-          // } else {
-          //   context.commit("setwishlist", null);
-          // }
+          if (data != null) {
+            context.commit("setCart", data);
+          } else {
+            context.commit("setCart", null);
+          }
         });
     },
     
     addToCart: async (context, item, userID) => {
       userID = context.state.user.userID;
-      // console.log(userID);
         await fetch("https://supremium2.onrender.com/users/" + userID + "/cart", {
           method: "POST",
           body: JSON.stringify(item),
@@ -283,21 +273,30 @@ export default createStore({
         })
         .then((res) => res.json())
         .then((data) => {
-          // context.state.msg = data.msg;
           context.dispatch("getCart", data);
         });
     },
 
-    deleteFromCart: async (context, list, userID) => {
+    deleteFromCart: async (context, cart, userID) => {
+      console.log(cart)
       userID = context.state.user.userID;
-      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart/" + list.cartID,
-          {
+      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart/" + cart, {
             method: "DELETE",
-            headers: {"Content-type": "application/json; charset=UTF-8"},
           }
         )
         .then((res) => res.json())
         .then((data) => {
+          context.dispatch("getCart", userID, data);
+        });
+    },
+
+    deleteCart: async (context, userID) => {
+      await fetch("https://supremium2.onrender.com/users/" + userID + "/cart/", {
+          method: "DELETE",
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
           // context.state.msg = data.msg;
           context.dispatch("getCart", userID);
         });

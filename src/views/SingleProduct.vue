@@ -13,7 +13,7 @@
                 <p>{{ product.prodDescription }}</p> 
                 <div class="row mx-2">
                     <button class="col-6 price">${{ product.price }}</button>
-                    <button class="my-5 buy col-6" @click="addCart">Add to Cart</button>
+                    <button class="btn btn-success my-5 buy col-6" @click="addToCart(product.id)">Add to Cart</button>
                 </div>
                 </div>
             </div>
@@ -46,10 +46,8 @@ export default {
     },
 
     methods: {
-        addCart() {
-      this.$store.dispatch("addToCart", {
-        userID: this.userID,
-      })
+        addToCart() {
+      this.$store.dispatch("addToCart", { userID: this.userID})
     }
   }
 }

@@ -1,42 +1,60 @@
 <template>
-    <!-- <div v-if="user"> -->
-    <!-- <Navbar/> -->
+    <div v-if="user">
+    <Navbar/>
     <div v-if="cart">
-        <h1>heading</h1>
         <div class="body">
-            <div class="container loginbox p-2  animate__animated animate__fadeIn" v-for="item in cart" :key="item.id">
+            <div class="container loginbox p-2  animate__animated animate__fadeIn">
                 <h1 class="my-4 head">Checkout</h1>
-                <div class="row justify-content-center" >
-                    <div class="col products">Products</div>
-                    <div>
-                        <img :src="item.imgURL" alt="">
-                    </div>
-                    <div class="col price">Price</div>
-                    <div>${{ item.price }}</div>
+                <div class="container">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th class="col-6"><h3>Product</h3></th>
+                        <th class="col-6"><h3>Price</h3></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="prodRow my-5" v-for="item in cart" :key="item.id">
+                        <td><img :src="item.imgURL" alt="" class="checkIMG"></td>
+                        <td class="text-success"><h5 class="my-4">${{ item.price }}</h5></td>
+                        <th><button class="btn btn-danger my-3" @click="deleteFromCart(item.id)">Del</button></th>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
         </div>
             </div>
+            <Footer/>
     </div>
-    <!-- <div v-else>
-        <h1>Blah</h1>
-         <div class="body">
+    <div v-else>
+        <div class="body">
             <div class="container loginbox p-2  animate__animated animate__fadeIn">
                 <h1 class="my-4 head">Checkout</h1>
-                <div class="row justify-content-center">
-                    <div class="col products">Products</div>
-                    <div>
-                        <img :src="user.cart.imgURL">
-                    </div>
-                    <div class="col price">Price</div>
-                    <div>$</div>
+                <div class="container">
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th class="col-6"><h3>Product</h3></th>
+                        <th class="col-6"><h3>Price</h3></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="prodRow my-5">
+                        <td><img src="https://i.postimg.cc/7ZXKpZ68/nikesb-dunk-paris-020d4294749750daa11b9b866154bc17.jpg" alt="" class="checkIMG"></td>
+                        <td class="text-success"><h5 class="my-4">$130000</h5></td>
+                        <th><button class="btn btn-danger my-3" @click="deleteFromCart(item.id)">Del</button></th>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
         </div>
-            </div> -->
-            <Footer/>
-    <!-- </div>  -->
-    <!-- </div> -->
+    </div>
+    </div>
+    <Footer/>
+    </div>
 
-    <!-- <div v-else>
+
+    <div v-else>
     <div class="container">
         <div class="row vh-100 d-flex justify-content-center align-content-center">
           <div class="text-center">
@@ -46,7 +64,7 @@
           </div>
         </div>
       </div>
-</div> -->
+</div>
 </template>
 
 <script>
@@ -57,12 +75,12 @@ import Footer from '../components/Footer.vue'
         name: 'Checkout',
         components: {Navbar, Footer},
     computed: {
-        // user() {
-        //     return this.$store.state.user;
-        // },
+        user() {
+            return this.$store.state.user;
+        },
         cart() {
             console.log(this.$store.state.cart)
-            // return this.$store.state.user.cart
+            return this.$store.state.cart
         },
     },
 
@@ -71,15 +89,34 @@ import Footer from '../components/Footer.vue'
     },
 
     methods: {
+        deleteFromCart(id) {
+          this.$store.dispatch("deleteFromCart", id);
+           alert("Product was deleted");
+        },
     }
 }
 </script>
 
 <style scoped>
 
-.row{
+.table{ 
+    color: white;
     text-align: center;
 }
+
+.table th{
+    border-style: none;
+}
+
+.table td{
+    border-style: none;
+}
+
+.checkIMG{
+    height: 70px;
+    width: 110px;
+}
+
 .my-element {
   animation: fadeIn;
   animation-duration: 5s;
@@ -101,6 +138,7 @@ import Footer from '../components/Footer.vue'
     position: absolute;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
+    margin-top: 130px;
 }
 
 h1{
