@@ -214,7 +214,7 @@ class Cart{
       let item = JSON.parse(results[0].cart).filter((x) => {
         return x.id != req.params.id;
       });
-      database.query(`UPDATE users SET cart = ? WHERE userID= ${req.params.id};`,[JSON.stringify(item), req.params.id], (err) => {
+      database.query(`UPDATE users SET cart = ? WHERE userID= ${req.params.cartID};`,[JSON.stringify(item), req.params.id], (err) => {
           if (err) throw err;
           res.json({
             msg: "Item Deleted from Cart",
