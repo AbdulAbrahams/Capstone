@@ -11,7 +11,7 @@ class User {
     database.query(`SELECT * FROM users WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
       if (result.length === 0) {
-        res.status(401).json({ err: "Incorrect email address" });
+        res.status(401).json({ err: "You entered an incorrect password or not registered. Please try again" });
       } else {
         const passMatch = await compare(req.body.userPass, result[0].userPass);
         if (!passMatch) {
@@ -71,7 +71,7 @@ class User {
 
     database.query(`INSERT INTO users SET ?;`, [detail], (err) => {
       if (err) {
-        res.status(401).json({ err });
+        res.status(401).json({err: "Email already in use"});
       } else {
         const jwToken = createToken(user);
         res.cookie("LegitUser", jwToken, {
