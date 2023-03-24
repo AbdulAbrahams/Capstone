@@ -11,11 +11,11 @@ class User {
     database.query(`SELECT * FROM users WHERE userEmail = '${userEmail}';`, async (err, result) => {
       if (err) throw err;
       if (result.length === 0) {
-        res.alert({msg: "You have entered an incorrect Email or Password. Please try again." });
+        res.status(401).json({ err: "Incorrect email address" });
       } else {
         const passMatch = await compare(req.body.userPass, result[0].userPass);
         if (!passMatch) {
-          res.alert({msg: "You have entered an incorrect Email or Password. Please try again." });
+          res.status(401).json({err: "You entered an incorrect password or not registered. Please try again"});
         } else {
           const data = {
             user: {
