@@ -16,9 +16,100 @@
       </thead>
       <tbody>
         <tr>
-          <td>get</td>
-          <td>/</td>
+          <td>login</td>
+          <td>/login</td>
+          <td>Post: A user</td>
+        </tr>
+        <tr>
+          <td>createUser</td>
+          <td>/register</td>
+          <td>Post: A user</td>
+        </tr>
+        <tr>
+          <td>fetchUsers</td>
+          <td>/users</td>
+          <td>get: Gets All the Users</td>
+        </tr>
+        <tr>
+          <td>fetchUser</td>
+          <td>/user/:id</td>
+          <td>get: Gets a Single User</td>
+        </tr>
+        <tr>
+          <td>updateUser</td>
+          <td>/user/:id</td>
+          <td>put: Updates a User</td>
+        </tr>
+        <tr>
+          <td>deleteUser</td>
+          <td>/user/:id</td>
+          <td>delete: Deletes a User</td>
         </tr>
       </tbody>
-    </table></body>
+    </table>
+    
+    <h2>Product Route Description</h2>
+    
+        <table>
+      <thead>
+        <th>Method</th>
+        <th>Path</th>
+        <th>Description</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>fetchProducts</td>
+          <td>/products</td>
+          <td>get: Gets all the Products</td>
+        </tr>
+        <tr>
+          <td>fetchProduct</td>
+          <td>/product/:id</td>
+          <td>get: A Product</td>
+        </tr>
+        <tr>
+          <td>addProduct</td>
+          <td>/product</td>
+          <td>post: Adds a Product</td>
+        </tr>
+        <tr>
+          <td>updateProduct</td>
+          <td>/product/:id</td>
+          <td>put: Updates a Product</td>
+        </tr>
+        <tr>
+          <td>deleteProduct</td>
+          <td>/product/:id</td>
+          <td>delete: Deletes a Product</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h2>Cart Route Description</h2>
+    
+        <table>
+      <thead>
+        <th>Method</th>
+        <th>Path</th>
+        <th>Description</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>fetchCart</td>
+          <td>/users/:id/cart</td>
+          <td>get: Gets Users Cart</td>
+        </tr>
+        <tr>
+          <td>addToCart</td>
+          <td>/users/:id/cart</td>
+          <td>post: Adds a Product to the Cart</td>
+        </tr>
+        <tr>
+          <td>deleteFromCart</td>
+          <td>/users/:id/cart/:cartID</td>
+          <td>delete: Deletes a Product from the Cart</td>
+        </tr>
+      </tbody>
+    </table>
+    </body>
 </html>
