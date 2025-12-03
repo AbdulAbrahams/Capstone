@@ -85,7 +85,7 @@ i{
 .body{
     margin: 0;
     padding: 0;
-    background: url(https://i.postimg.cc/FHmM7t6Z/paul-volkmer-AZf7-DL-8-Qhk-unsplash.jpg);
+    background: url(https://i.postimg.cc/Zqdw9806/50069d8487d8417f1a5c9c0dc7431cee.jpg);
     background-position: center;
     background-size: cover;
     min-height: 100vh;
