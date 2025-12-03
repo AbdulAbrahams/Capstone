@@ -85,7 +85,7 @@ i{
 .body{
     margin: 0;
     padding: 0;
-    background: url(https://i.postimg.cc/Zqdw9806/50069d8487d8417f1a5c9c0dc7431cee.jpg);
+    background: url(https://i.postimg.cc/sD0C3YM2/devin-avery-7GWQJ0y-YRh-M-unsplash.jpg);
     background-position: center;
     background-size: cover;
     min-height: 100vh;
